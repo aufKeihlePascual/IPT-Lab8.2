@@ -48,7 +48,7 @@ class PDFFormat implements ProfileFormatter
 
         // Extra-Curricular Activities
         $this->pdf->Cell(0, 10, 'Extra-Curricular Activities:', 0, 1);
-        foreach ($profile->getActivities() as $activity) {
+        foreach ($profile->getExtracurricularActivities() as $activity) {
             $this->pdf->Cell(0, 10, '- ' . $activity, 0, 1);
         }
 
