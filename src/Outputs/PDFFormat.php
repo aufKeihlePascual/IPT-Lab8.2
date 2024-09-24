@@ -43,7 +43,11 @@ class PDFFormat implements ProfileFormatter
         // Certifications
         $this->pdf->Cell(0, 10, 'Certifications:', 0, 1);
         foreach ($profile->getCertifications() as $certification) {
-            $this->pdf->Cell(0, 10, '- ' . $certification, 0, 1);
+            if (is_array($certification)) {
+                $this->pdf->Cell(0, 10, '- ' . $certification['name'] . ' ' . $certification['date'], 0, 1);
+            } else {
+                $this->pdf->Cell(0, 10, '- ' . $certification, 0, 1);
+            }
         }
 
         // Extra-Curricular Activities
@@ -67,7 +71,17 @@ class PDFFormat implements ProfileFormatter
 
     public function render()
     {
-        // Output PDF to string (to save to file or stream)
-        return $this->pdf->Output();
+        // Output PDF to string
+        // return $this->pdf->Output();
+
+        ob_clean();
+        
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="profile.pdf"');
+        
+        // Output the PDF
+        $this->pdf->Output();
+        
+        exit;
     }
 }
