@@ -23,7 +23,7 @@ class TextFormat implements ProfileFormatter
             $output .= "- " . $job['job_title'] . " at " . $job['company'] . " (" . $job['start_date'] . " to " . $job['end_date'] . ")\n";
         }
 
-        // Certifications (handle potential arrays within arrays)
+        // Certifications
         $output .= PHP_EOL . "Certifications:\n";
         foreach ($profile->getCertifications() as $certification) {
             if (is_array($certification)) {
@@ -33,7 +33,7 @@ class TextFormat implements ProfileFormatter
             }
         }
 
-        // Extra-Curricular Activities (handle potential arrays within arrays)
+        // Extra-Curricular Activities
         $output .= PHP_EOL . "Extra-Curricular Activities:\n";
         foreach ($profile->getExtracurricularActivities() as $activity) {
             if (is_array($activity)) {
@@ -43,7 +43,7 @@ class TextFormat implements ProfileFormatter
             }
         }
 
-        // Languages (handle potential arrays)
+        // Languages
         $output .= PHP_EOL . "Languages:\n";
         foreach ($profile->getLanguages() as $language) {
             if (is_array($language)) {

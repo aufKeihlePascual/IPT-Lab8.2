@@ -32,28 +32,46 @@ class HTMLFormat implements ProfileFormatter
         // Certifications
         $output .= "<h2>Certifications</h2><ul>";
         foreach ($profile->getCertifications() as $certification) {
-            $output .= "<li>" . $certification . "</li>";
+            if (is_array($certification)) {
+                $output .= "<li>" . implode(", ", $certification) . "</li>";
+            } else {
+                $output .= "<li>" . $certification . "</li>";
+            }
         }
         $output .= "</ul>";
 
         // Extra-Curricular Activities
         $output .= "<h2>Extra-Curricular Activities</h2><ul>";
-        foreach ($profile->getActivities() as $activity) {
-            $output .= "<li>" . $activity . "</li>";
+        foreach ($profile->getExtracurricularActivities() as $activity) {
+            if (is_array($certification)) {
+                $output .= "<li>" . implode(", ", $activity) . "</li>";
+            } else {
+                $output .= "<li>" . $activity . "</li>";
+            }
         }
         $output .= "</ul>";
 
         // Languages
         $output .= "<h2>Languages</h2><ul>";
         foreach ($profile->getLanguages() as $language) {
-            $output .= "<li>" . $language . "</li>";
+            if (is_array($certification)) {
+                $output .= "<li>" . implode(", ", $language) . "</li>";
+            } else {
+                $output .= "<li>" . $language . "</li>";
+            }
+            
         }
         $output .= "</ul>";
 
         // References
         $output .= "<h2>References</h2><ul>";
         foreach ($profile->getReferences() as $reference) {
-            $output .= "<li>" . $reference['name'] . " (" . $reference['contact'] . ")</li>";
+            if (is_array($certification)) {
+                $output .= "<li>" . implode(", ", $reference) . "</li>";
+            } else {
+                $output .= "<li>" . $reference['name'] . " (" . $reference['contact'] . ")</li>";
+            }
+            
         }
         $output .= "</ul>";
 
