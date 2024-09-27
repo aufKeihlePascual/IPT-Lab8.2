@@ -10,76 +10,49 @@ class HTMLFormat implements ProfileFormatter
 
     public function setData($profile)
     {
-        $output = "<h1>Profile of " . $profile->getFullName() . "</h1>";
-        $output .= "<p>Email: " . $profile->getContactDetails()['email'] . "</p>";
-        $output .= "<p>Phone: " . $profile->getContactDetails()['phone_number'] . "</p>";
-        
-        // Education
-        $output .= "<h2>Education</h2>";
-        $output .= "<p>" . $profile->getEducation()['degree'] . " at " . $profile->getEducation()['university'] . "</p>";
+        $output = <<<HTML
 
-        // Skills
-        $output .= "<h2>Skills</h2>";
-        $output .= "<p>" . implode(", ", $profile->getSkills()) . "</p>";
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Profile of {$profile->getName()}</title>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                .justify-text {
+                    text-align: justify;
+                    padding-left: 20px;
+                    padding-right: 20px; 
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container mt-5">
+                <h1 class="text-center">Profile of {$profile->getName()}</h1>
+                <div class="text-center">
+                    <img src="https://www.auf.edu.ph/home/images/articles/bya.jpg" alt="Founder Image" class="img-fluid rounded-circle mb-4" style="max-width: 200px;">
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Story</h5>
+                        <p class="card-text justify-text">{$profile->getStory()}</p>
+                    </div>
+                </div>
+            </div>
 
-        // Experience
-        $output .= "<h2>Experience</h2><ul>";
-        foreach ($profile->getExperience() as $job) {
-            $output .= "<li>" . $job['job_title'] . " at " . $job['company'] . " (" . $job['start_date'] . " to " . $job['end_date'] . ")</li>";
-        }
-        $output .= "</ul>";
-
-        // Certifications
-        $output .= "<h2>Certifications</h2><ul>";
-        foreach ($profile->getCertifications() as $certification) {
-            if (is_array($certification)) {
-                $output .= "<li>" . implode(", ", $certification) . "</li>";
-            } else {
-                $output .= "<li>" . $certification . "</li>";
-            }
-        }
-        $output .= "</ul>";
-
-        // Extra-Curricular Activities
-        $output .= "<h2>Extra-Curricular Activities</h2><ul>";
-        foreach ($profile->getExtracurricularActivities() as $activity) {
-            if (is_array($certification)) {
-                $output .= "<li>" . implode(", ", $activity) . "</li>";
-            } else {
-                $output .= "<li>" . $activity . "</li>";
-            }
-        }
-        $output .= "</ul>";
-
-        // Languages
-        $output .= "<h2>Languages</h2><ul>";
-        foreach ($profile->getLanguages() as $language) {
-            if (is_array($certification)) {
-                $output .= "<li>" . implode(", ", $language) . "</li>";
-            } else {
-                $output .= "<li>" . $language . "</li>";
-            }
-            
-        }
-        $output .= "</ul>";
-
-        // References
-        $output .= "<h2>References</h2><ul>";
-        foreach ($profile->getReferences() as $reference) {
-            if (is_array($certification)) {
-                $output .= "<li>" . implode(", ", $reference) . "</li>";
-            } else {
-                $output .= "<li>" . $reference['name'] . " (" . $reference['contact'] . ")</li>";
-            }
-            
-        }
-        $output .= "</ul>";
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        HTML;
 
         $this->response = $output;
     }
 
     public function render()
     {
+        header('Content-Type: text/html');
         return $this->response;
     }
 }
