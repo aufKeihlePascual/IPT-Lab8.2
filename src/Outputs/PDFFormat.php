@@ -9,6 +9,12 @@ class PDFFormat implements ProfileFormatter
 {
     private $pdf;
 
+    private function addIndentedDetail($label, $value)
+    {
+        $this->pdf->Cell(10);
+        $this->pdf->Cell(0, 10, $label . ': ' . $value, 0, 1);
+    }
+
     public function setData($profile)
     {
         $this->pdf = new Fpdf();
@@ -31,12 +37,14 @@ class PDFFormat implements ProfileFormatter
         $this->pdf->Cell(0, 10, 'Skills: ');
         $this->pdf->Ln();
         foreach ($profile->getSkills() as $skill) {
+            $this->pdf->Cell(10);
             $this->pdf->Cell(0, 10, '- ' . $skill, 0, 1);
         }
 
         // Experience
         $this->pdf->Cell(0, 10, 'Experience:', 0, 1);
         foreach ($profile->getExperience() as $job) {
+            $this->pdf->Cell(10);
             $this->pdf->Cell(0, 10, '- ' . $job['job_title'] . ' at ' . $job['company'] . ' (' . $job['start_date'] . ' to ' . $job['end_date'] . ')', 0, 1);
         }
 
@@ -44,8 +52,10 @@ class PDFFormat implements ProfileFormatter
         $this->pdf->Cell(0, 10, 'Certifications:', 0, 1);
         foreach ($profile->getCertifications() as $certification) {
             if (is_array($certification)) {
-                $this->pdf->Cell(0, 10, '- ' . $certification['name'] . ' ' . $certification['date'], 0, 1);
+                $this->pdf->Cell(10);
+                $this->pdf->Cell(0, 10, '- ' . $certification['name'] . ' (' . $certification['date_earned'] . ')', 0, 1);
             } else {
+                $this->pdf->Cell(10);
                 $this->pdf->Cell(0, 10, '- ' . $certification, 0, 1);
             }
         }
@@ -53,19 +63,38 @@ class PDFFormat implements ProfileFormatter
         // Extra-Curricular Activities
         $this->pdf->Cell(0, 10, 'Extra-Curricular Activities:', 0, 1);
         foreach ($profile->getExtracurricularActivities() as $activity) {
-            $this->pdf->Cell(0, 10, '- ' . $activity, 0, 1);
+            if (is_array($activity)) {
+                $this->pdf->Cell(10);
+                $this->pdf->Cell(0, 10, '- ' . $activity['start_date'] . ' to ' . $activity['end_date'], 0, 1);
+            } else {
+                $this->pdf->Cell(10);
+                $this->pdf->Cell(0, 10, '- ' . $activity, 0, 1);
+            }
         }
 
         // Languages
         $this->pdf->Cell(0, 10, 'Languages:', 0, 1);
         foreach ($profile->getLanguages() as $language) {
-            $this->pdf->Cell(0, 10, '- ' . $language, 0, 1);
+            if (is_array($language)) {
+                $this->pdf->Cell(10);
+                $this->pdf->Cell(0, 10, '- ' . $language['language'] . ' (' . $language['proficiency'] . ')', 0, 1);
+            } else {
+                $this->pdf->Cell(10);
+                $this->pdf->Cell(0, 10, '- ' . $language, 0, 1);
+            }
         }
 
         // References
         $this->pdf->Cell(0, 10, 'References:', 0, 1);
         foreach ($profile->getReferences() as $reference) {
-            $this->pdf->Cell(0, 10, '- ' . $reference['name'] . ' (' . $reference['contact'] . ')', 0, 1);
+            $this->pdf->Cell(0, 10, '- Name: ' . $reference['name'], 0, 1);
+            
+            $this->addIndentedDetail('Position', $reference['position']);
+            $this->addIndentedDetail('Company', $reference['company']);
+            $this->addIndentedDetail('Email', $reference['email']);
+            $this->addIndentedDetail('Phone', $reference['phone_number']);
+            
+            $this->pdf->Ln();
         }
     }
 
